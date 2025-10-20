@@ -43,7 +43,6 @@ if ($action === 'createdb') {
             $dbMessage = 'خطا در اجرای table.php: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
         }
     }
-    // پیام را ذخیره می‌کنیم تا در بخش HTML نمایش دهیم
     $dbStatusMsg = $dbMessage;
 }
 
@@ -55,9 +54,7 @@ if ($action === 'createdb') {
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>نصب ربات میرزا</title>
 
-<!-- بارگذاری فونت‌های Vazir -->
 <style>
-/* Vazir */
 @font-face{font-family:'Vazir';src:url('../app/fonts/Vazir-Light.woff2') format('woff2'),url('../app/fonts/Vazir-Light.woff') format('woff');font-weight:300;font-style:normal;font-display:swap}
 @font-face{font-family:'Vazir';src:url('../app/fonts/Vazir-Medium.woff2') format('woff2'),url('../app/fonts/Vazir-Medium.woff') format('woff');font-weight:500;font-style:normal;font-display:swap}
 @font-face{font-family:'Vazir';src:url('../app/fonts/Vazir-Bold.woff2') format('woff2'),url('../app/fonts/Vazir-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
@@ -90,14 +87,12 @@ body{
 .badge{font-size:12px; padding:4px 10px; border-radius:999px; background:rgba(34,211,238,.18); color:#a5f3fc; border:1px solid rgba(34,211,238,.35)}
 .body{padding:22px}
 
-/* دو ستون؛ در موبایل یک ستون */
 .grid{display:grid; grid-template-columns:1.2fr .8fr; gap:24px}
 @media (max-width:880px){
   body{align-items:flex-start; padding:16px}
   .grid{grid-template-columns:1fr; gap:18px}
 }
 
-/* فرم و فیلدها */
 .form{display:flex; flex-direction:column; gap:var(--sp)}
 .row{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--sp)}
 @media (max-width:560px){ .row{grid-template-columns:1fr} }
@@ -108,7 +103,6 @@ input[type=text], input[type=password], input[type=url] {
   background:rgba(255,255,255,.06); color:var(--txt); outline:none; font-size:var(--fs); font-weight:500;
   transition:box-shadow .2s, border-color .2s;
 }
-/* حفظ رنگ پس‌زمینه برای فیلدهای پرشده */
 input[type=text]:not(:placeholder-shown),
 input[type=password]:not(:placeholder-shown),
 input[type=url]:not(:placeholder-shown) {
@@ -120,7 +114,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
   font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto; opacity:.7;
 }
 
-/* چشم رمز */
 .input-affix{ position:relative }
 .input-affix input{ padding-left:88px; padding-right:14px; }
 .affix-btn{
@@ -133,7 +126,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
 }
 .affix-btn svg{width:16px; height:16px; opacity:.9}
 
-/* دکمه اصلی */
 .btn{
   display:inline-flex; align-items:center; justify-content:center; gap:8px;
   width:100%; height:46px; border-radius:12px; font-size:15px; cursor:pointer; border:0;
@@ -146,7 +138,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
 .loader{ width:16px; height:16px; border-radius:999px; border:2px solid rgba(255,255,255,.6); border-left-color:transparent; animation:spin .7s linear infinite }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ستون راست: وضعیت و راهنما */
 .checks{display:grid; gap:10px}
 .check{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-radius:10px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08)}
 .pill{padding:4px 10px; border-radius:999px; font-size:12px; border:1px solid}
@@ -173,7 +164,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
     <div class="body">
       <?php if ($action === 'none'): ?>
         <div class="grid">
-          <!-- فرم -->
           <form id="install-form" class="form" method="post" action="install.php">
             <div class="field">
               <label>توکن ربات تلگرام</label>
@@ -224,7 +214,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
             <div class="hint" style="font-size:11px; opacity:.8; margin-top:4px">پس از نصب، وب‌هوک با استفاده از API تلگرام ثبت می‌شود.</div>
           </form>
 
-          <!-- ستون راست: چک‌ها و راهنمای مرحله‌ای -->
           <div>
             <div class="field">
               <label>پیش‌نیازهای محیط</label>
@@ -257,20 +246,16 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
 
       <?php elseif ($action === 'ok'): ?>
         <?php
-          //
           $domainHostCron = '';
           if (is_file($rootDir . '/config.php')) {
-              // بارگذاری متغیر $domainhosts از config.php.
-              // با استفاده از @ جهت جلوگیری از خطاهای احتمالی اتصال به پایگاه داده در هنگام include.
+
               @include $rootDir . '/config.php';
               if (isset($domainhosts)) {
                   $domainHostCron = rtrim($domainhosts, '/');
               }
           }
-          // تعریف کرون‌جاب‌ها؛ از curl برای فراخوانی اسکریپت‌های پوشه cronbot استفاده می‌کنیم
           $cronJobs = [];
           if ($domainHostCron !== '') {
-              // تعریف فرمان‌های کرون‌جاب همراه با توصیف بازهٔ اجرا
               $cronJobs = [
                   ['*/1 * * * *',   "curl https://{$domainHostCron}/cronbot/croncard.php",        'هر 1 دقیقه'],
                   ['*/1 * * * *',   "curl https://{$domainHostCron}/cronbot/NoticationsService.php", 'هر 1 دقیقه'],
@@ -313,7 +298,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
             <tbody>
             <?php foreach ($cronJobs as $cj): ?>
               <tr>
-                <!-- فقط فرمان کرون (بدون زمان‌بندی) -->
                 <td style="padding:4px 6px; white-space:nowrap"><?php echo htmlspecialchars($cj[1], ENT_QUOTES, 'UTF-8'); ?></td>
                 <td style="padding:4px 6px; white-space:nowrap"><?php echo htmlspecialchars($cj[2], ENT_QUOTES, 'UTF-8'); ?></td>
                 <td style="padding:4px 6px; white-space:nowrap">
@@ -328,7 +312,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
         <?php endif; ?>
         <div class="center"><a class="tiny" href="./">بازگشت</a></div>
 
-        <!-- استایل و اسکریپت برای دکمه‌های کپی -->
         <style>
         .copy-btn {
           padding:4px 8px;
@@ -355,7 +338,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
                             this.textContent = 'کپی شد';
                             setTimeout(() => { this.textContent = original; }, 1500);
                         }).catch(() => {
-                            // fallback: copy to a temporary textarea
                             var temp = document.createElement('textarea');
                             temp.value = cmd;
                             document.body.appendChild(temp);
@@ -367,7 +349,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
                             setTimeout(() => { this.textContent = original; }, 1500);
                         });
                     } else {
-                        // fallback for older browsers
                         var temp = document.createElement('textarea');
                         temp.value = cmd;
                         document.body.appendChild(temp);
@@ -418,7 +399,6 @@ input:focus{ box-shadow:0 0 0 3px rgba(56,189,248,.25); border-color:rgba(56,189
 </div>
 
 <script>
-// اسکریپت کوچک برای دکمهٔ نمایش رمز و غیرفعال کردن دکمه هنگام ارسال
 (function(){
   const form = document.getElementById('install-form');
   const btn  = document.getElementById('submitBtn');
